@@ -10,9 +10,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (Auth::attempt($request->only('email', 'password'))) {
-            
+
             //Deleto os tokens anteriores
-            $request->user()->tokens->each(function($token) {
+            $request->user()->tokens->each(function ($token) {
                 $token->delete();
             });
 
@@ -22,9 +22,9 @@ class AuthController extends Controller
                 'token' => $request->user()->createToken('user')->plainTextToken,
             ]);
 
-            }else {
-                return response()->json(['message' => 'Error message'],400);
+            
+        } else {
+            return response()->json(['message' => 'Error message'], 400);
         }
-        
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Ramsey\Uuid\Guid\Guid;
 
 class User extends Authenticatable
 {
@@ -48,5 +49,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    //Atribui o UUID automaticamente
+    static protected function boot(){
+        parent::boot();
+        
+        static::creating(function($user){
+            if (empty($user->id)){
+                $user->id = (string) Guid::uuid4();
+            }
+        });
     }
 }

@@ -8,9 +8,7 @@ use App\Http\Controllers\WordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/auth/signup', function() {
-    return response()->json(['message'=>'auth/signup route']);
-});
+Route::post('/auth/signup', [UserController::class, 'register']);
 
 Route::post('/auth/signin', [AuthController::class, 'login']);
 
@@ -26,9 +24,7 @@ Route::middleware('auth:sanctum')->group(function() {
     
     Route::get('/entries/en', [WordsController::class, 'index']);
 
-    Route::get('/user/me', function(Request $request) { 
-        return response()->json($request->user());
-    });
+    Route::get('/user/me', [UserController::class, 'show']);
     
     Route::get('/user/me/history', [HistoryWordsController::class, 'show']);
     
