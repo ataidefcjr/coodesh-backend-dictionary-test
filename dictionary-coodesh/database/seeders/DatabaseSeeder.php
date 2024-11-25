@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory(10)->create(
-            //     [
-            //     'name' => 'Test User',
-            //     'email' => 'test@example.com',
-            // ]
+        User::factory(1)->create(
+                [
+                'name' => 'Ademir',
+                'email' => 'ademir@teste.com',
+                'password' => '123456'
+            ]
         );
 
         Artisan::call('import:words');

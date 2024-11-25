@@ -19,11 +19,16 @@ class HistoryWordsController extends Controller
         ]);
     }
 
-    static public function index($userId, $page, $limit){
+    static public function show(Request $request){
         
+        $userId = $request->user()->id;
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 4);
+
         $data = HistoryWords::where('user_id', $userId)->select('*')->paginate($limit, ['*'], ['page'], $page);
         $formatedHistory = WordsResource::responseFormatter($data);
-        return $formatedHistory;
+        
+        return response()->json($formatedHistory,200);
     }
 
 
