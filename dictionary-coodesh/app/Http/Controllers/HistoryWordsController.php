@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 
 class HistoryWordsController extends Controller
 {
+    //Guarda um histórico (método estático, chamado pelo WordController)
     static public function store($userId, $word){
+        //Verifica se existe o registro antes de criar
         HistoryWords::firstOrCreate([
             'user_id' => $userId,
             'word' => $word,
@@ -19,13 +21,21 @@ class HistoryWordsController extends Controller
         ]);
     }
 
-    static public function show(Request $request){
-        
+    //Mostra os históricos
+    public function show(Request $request){
+        //Validação
+        $request->validate([
+            'limit' => 'nullable|numeric|max:100|min:1',
+            'page' => 'nullable|numeric|min:1',
+        ]);
+
         $userId = $request->user()->id;
         $page = $request->get('page', 1);
         $limit = $request->get('limit', 4);
 
+        //Busca resultado
         $data = HistoryWords::where('user_id', $userId)->select('*')->paginate($limit, ['*'], ['page'], $page);
+        //Formata
         $formatedHistory = WordsResource::responseFormatter($data);
         
         return response()->json($formatedHistory,200);

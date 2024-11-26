@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\WordsResource;
 use App\Models\Words;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 class WordsController extends Controller
 {
 
+    //Dados da palavra
     public function show(Request $request)
     {
         $userId = $request->user()->id;
@@ -23,11 +25,12 @@ class WordsController extends Controller
         $cachedEndTime = microtime(true);
 
         //Resposta via cache.
-        if ($cachedResponse){
-            $formatedTime = number_format(($cachedEndTime - $cachedStartTime)*1000,4) . 'ms';
+        if ($cachedResponse) {
+            HistoryWordsController::store($userId, $word);
+            $formatedTime = number_format(($cachedEndTime - $cachedStartTime) * 1000, 4) . 'ms';
             return response()->json($cachedResponse, 200)->withHeaders([
-                'x-cache'=>'HIT',
-                'x-response-time'=> $formatedTime
+                'x-cache' => 'HIT',
+                'x-response-time' => $formatedTime
             ]);
         }
 
@@ -37,52 +40,52 @@ class WordsController extends Controller
         $endTime = microtime(true);
 
         if (!isset($response['message'])) {
-            try {
-                //Registrar no histórico do usuário
-                HistoryWordsController::store($userId, $word);
 
-                //Guarda em Cache
-                $cacheTime = 30*24*60*60; // 30dias, 24horas, 60minutos, 60segundos
-                Cache::put("api-dictionary-$word",$response,$cacheTime);
+            //Se não existir a palavra no DB, registra para aparecer no endpoint /entries/en{search}
+            Words::firstOrCreate(['word' => $word], ['word' => $word]);
 
-                //Retorna a Resposta
-                $formatedTime = number_format(($endTime - $startTime)*1000,4) . 'ms';
-                return response()->json($response, 200)->withHeaders([
-                    'x-cache'=>'MISS',
-                    'x-response-time'=> $formatedTime
-                ]);
+            //Registrar no histórico do usuário
+            HistoryWordsController::store($userId, $word);
 
-            } catch (\Exception $e) {
-                //Se houer algum erro, retorna a mensagem padrão
-                return response()->json(['message' => "Error message"], 400);
-            }
-        } 
-        return response()->json(['message' => "Error message"], 400);
+            //Guarda em Cache
+            $cacheTime = 30 * 24 * 60 * 60; // 30dias, 24horas, 60minutos, 60segundos
+            Cache::put("api-dictionary-$word", $response, $cacheTime);
+
+            //Retorna a Resposta
+            $formatedTime = number_format(($endTime - $startTime) * 1000, 4) . 'ms';
+            return response()->json($response, 200)->withHeaders([
+                'x-cache' => 'MISS',
+                'x-response-time' => $formatedTime
+            ]);
+        }
+        throw new Exception();
+        
     }
 
 
 
-    //Busca de palavras com paginação
+    //Busca de palavras do DB
     public function index(Request $request)
     {
+        //Validação dos dados
+        $request->validate([
+            'search' => 'required|string|max:50',
+            'limit' => 'nullable|numeric|min:1|max:100',
+            'page' => 'nullable|numeric|min:1'
+        ]);
+
         //Valores padrões de acordo com o README fornecido
-        $search = $request->get('search', '');
+        $search = $request->get('search');
         $limit = $request->get('limit', 4);
         $page = $request->get('page', 1);
 
-        try {
-            //Busca no Banco de Dados
-            $result = Words::where('word', 'like', "$search%")->select('word')->paginate($limit, ['*'], ['page'], $page);
-            //Formata o resultado
-            $formatedResult = WordsResource::searchResponseFormatter($result);
+        //Busca no Banco de Dados
+        $result = Words::where('word', 'like', "$search%")->select('word')->paginate($limit, ['*'], ['page'], $page);
 
-            //Retorna o resultado
-            return response()->json($formatedResult, 200);
+        //Formata o resultado
+        $formatedResult = WordsResource::searchResponseFormatter($result);
 
-        } catch (\Exception $e) {
-
-            //Se houer algum erro, retorna a mensagem padrão
-            return response()->json(['message' => 'Error Message'], 400);
-        }
+        //Retorna o resultado
+        return response()->json($formatedResult, 200);
     }
 }

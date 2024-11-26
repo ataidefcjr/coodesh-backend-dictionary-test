@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Egulias\EmailValidator\Result\Result;
-use Illuminate\Http\Request;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WordsResource extends JsonResource
