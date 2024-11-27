@@ -96,7 +96,6 @@ Este é um passo a passo de como rodar a aplicação manualmente.
 - [**Git**](https://git-scm.com/downloads)
 - [**PHP**](https://www.php.net/downloads.php) - versão 8.3 ou superior
 - [**Composer**](https://getcomposer.org/download/) - versão 2.7 ou superior
-- [**Node.js**](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager)
 - [**MySQL**](https://dev.mysql.com/downloads/) (Opcional)
 
 Obs: Você pode utilizar outro database caso deseje, basta alterar as configurações do `.env`.
@@ -109,7 +108,7 @@ git clone https://github.com/ataidefcjr/coodesh-backend-dictionary-test.git
 cd coodesh-backend-dictionary-test/dictionary-coodesh
 ```
 
-2. Renomeie o arquivo `.env.example` para `.env` e faça as alterações necessárias, colocando suas credenciais de dados de acesso ao Banco de Dados.
+2. Renomeie o arquivo `.env.example` para `.env` e faça as alterações necessárias, colocando suas credenciais de acesso ao Banco de Dados.
 ```bash
 cp .env.example .env
 ```
@@ -127,8 +126,8 @@ DB_PASSWORD=
 3. Instale as dependẽncias do Composer e NPM
 ```bash
 composer install
-npm install
 ```
+
 
 4. Gere uma chave de acesso, a chave será automaticamente escrita no `.env`
 ```bash
@@ -174,17 +173,26 @@ cp .env.example .env
 3. Agora precisamos construir e subir a imagem Docker
 ```bash
 docker compose build
+```
+```bash
 docker compose up -d 
 ```
 
 4. Nesse passo garantimos que as dependencias sejam atualizadas, geramos uma chave e configuramos o banco de dados, nesse passo as palavras são importadas automaticamente com o argumento --seed.
 ```bash
 docker compose exec laravel.test composer update
+```
+```bash
 docker compose exec laravel.test php artisan key:generate
+```
+```bash
 docker compose exec laravel.test php artisan migrate:fresh --seed
 ```
 
 5. Agora damos as permissões corretas para garantir que não tenhamos erros de permissão no diretório de cache e storage
+```bash
+docker compose exec laravel.test chown -R sail:1000 /var/www/html/storage /var/www/html/bootstrap/cache
+```
 ```bash
 docker compose exec laravel.test chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 ```
