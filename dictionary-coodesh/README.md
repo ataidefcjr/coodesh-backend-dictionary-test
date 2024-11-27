@@ -186,7 +186,7 @@ docker compose exec laravel.test php artisan migrate:fresh --seed
 
 5. Agora damos as permissões corretas para garantir que não tenhamos erros de permissão no diretório de cache e storage
 ```bash
-docker compose exec chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+docker compose exec laravel.test chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 ```
 6. Reiniciamos os containeres para garantir que todas as alterações aplicadas entrem em vigor:
 ```bash
