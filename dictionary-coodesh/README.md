@@ -1,66 +1,54 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Backend Dictionary - Docker Setup
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+>  This is a challenge by [Coodesh](https://coodesh.com/)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Este repositório contém a aplicação API para o projeto **Dictionary**, construída com **Laravel**. 
 
-## Learning Laravel
+O Docker Compose é utilizado para facilitar o desenvolvimento e a execução do projeto em containers. Siga as etapas abaixo para configurar o ambiente de desenvolvimento no Docker.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Pré-requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- [**Docker** (versão 20.10.0 ou superior)](https://docs.docker.com/get-docker/) 
+- [**Docker Compose**  (versão 1.27.0 ou superior)](https://docs.docker.com/compose/install/)
 
-## Laravel Sponsors
+### Configuração do Ambiente
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Renomeie o arquivo `.env.example` para `.env`
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+2. Primeiro clone o repositório e navegue até o diretório
+```bash
+git clone https://github.com/ataidefcjr/coodesh-backend-dictionary-test.git
+cd coodesh-backend-dictionary-test/dictionary-coodesh
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3. Agora precisamos construir e subir a imagem Docker
+```bash
+docker compose build
+docker compose up -d 
+```
 
-## Contributing
+4. Nesse passo garantimos que as dependencias sejam atualizadas e configuramos o banco de dados, nesse passo as palavras são importadas automaticamente com o argumento --seed.
+```bash
+docker compose exec laravel.test composer update
+docker compose exec laravel.test php artisan migrate:fresh --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Agora damos as permissões corretas para garantir que não tenhamos erros de permissão no diretório de cache e storage
+```bash
+docker compose exec chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+```
+6. Reiniciamos os containeres para garantir que todas as alterações aplicadas entrem em vigor:
+```bash
+docker compose restart
+```
 
-## Code of Conduct
+### Acesse a documentação
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Agora com o container rodando, basta acessar a [**Documentação**](http://localhost:8000/docs/api) para conferir se está tudo certo.
