@@ -109,7 +109,7 @@ git clone https://github.com/ataidefcjr/coodesh-backend-dictionary-test.git
 cd coodesh-backend-dictionary-test/dictionary-coodesh
 ```
 
-2. Renomeie o arquivo `.env.example` para `.env` e faça as alterações necessárias, colocando suas credenciais de dados de acesso ao Banco de Dados.
+2. Renomeie o arquivo `.env.example` para `.env` e faça as alterações necessárias, colocando suas credenciais de acesso ao Banco de Dados.
 ```bash
 cp .env.example .env
 ```
@@ -127,6 +127,8 @@ DB_PASSWORD=
 3. Instale as dependẽncias do Composer e NPM
 ```bash
 composer install
+```
+```bash
 npm install
 ```
 
