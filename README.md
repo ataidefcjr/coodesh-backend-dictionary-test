@@ -174,17 +174,26 @@ cp .env.example .env
 3. Agora precisamos construir e subir a imagem Docker
 ```bash
 docker compose build
+```
+```bash
 docker compose up -d 
 ```
 
 4. Nesse passo garantimos que as dependencias sejam atualizadas, geramos uma chave e configuramos o banco de dados, nesse passo as palavras são importadas automaticamente com o argumento --seed.
 ```bash
 docker compose exec laravel.test composer update
+```
+```bash
 docker compose exec laravel.test php artisan key:generate
+```
+```bash
 docker compose exec laravel.test php artisan migrate:fresh --seed
 ```
 
 5. Agora damos as permissões corretas para garantir que não tenhamos erros de permissão no diretório de cache e storage
+```bash
+docker compose exec laravel.test chown -R sail:1000 /var/www/html/storage /var/www/html/bootstrap/cache
+```
 ```bash
 docker compose exec laravel.test chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 ```
