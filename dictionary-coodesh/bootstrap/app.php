@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         
         $exceptions->render(function (Exception $e){
-            return response()->json(['message'=>'Error message'], 400);
+            return response()->json(['message'=>'Woops! Something went wrong!'], 400);
         }); // Padroniza exceções
 
     })->create();

@@ -10,7 +10,13 @@ use Illuminate\Http\Request;
 
 class FavoriteWordsController extends Controller
 {
-    //Guarda um favorito
+    /**
+     * Add Favorite
+     * 
+     * Do you like a word so much? <strong>Favorite it</strong>!
+     *  
+     * <strong>Note</strong>: You can only favorite a word that exists in the API Database
+     */
     public function store(Request $request)
     {
         $id = $request->user()->id;
@@ -34,7 +40,12 @@ class FavoriteWordsController extends Controller
         throw new Exception();
     }
 
-    //Exclui um favorito
+    /**
+     * 
+     * Delete Favorite
+     * 
+     * Favorited a word but don't want it anymore? <strong>Unfavorite it</strong>!
+     */
     public function destroy(Request $request)
     {
         $word = $request->route('word');
@@ -53,7 +64,13 @@ class FavoriteWordsController extends Controller
         throw new Exception();
     }
 
-    //Mostra os favoritos
+    /**
+     * Favorite Words
+     * 
+     * If you want to know what are your favorite words are, you've come to the right route.
+     * <br>
+     * You can specify the number of results per page (limit) and the page you'd like to visit.
+     */
     public function show(Request $request)
     {
         //Validação

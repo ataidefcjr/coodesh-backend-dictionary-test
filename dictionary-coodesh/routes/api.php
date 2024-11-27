@@ -7,9 +7,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {return response()->json(["message"=> "Fullstack Challenge 🏅 - Dictionary"],200);});
+Route::get('/', [UserController::class, 'index']);
 
-Route::post('/auth/signup', [UserController::class, 'register']); 
+Route::post('/auth/signup', [AuthController::class, 'register']); 
 
 Route::post('/auth/signin', [AuthController::class, 'login']); 
 
@@ -29,7 +29,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user/me/history', [HistoryWordsController::class, 'show']); 
     
     Route::get('/user/me/favorites', [FavoriteWordsController::class, 'show']); 
-        
+    
+    Route::get('/auth/logoff', [AuthController::class, 'logout']); 
 });
 
 

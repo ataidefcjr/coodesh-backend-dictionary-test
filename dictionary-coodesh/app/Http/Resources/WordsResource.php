@@ -31,6 +31,7 @@ class WordsResource extends JsonResource
 
 
         return [
+            /** @var object[] */
             'results' => $result->map(fn($register)=>['word'=>$register->word, 'added'=>$register->added]),
             'totalDocs' => $result->total(),
             'page' => $result->currentPage(),

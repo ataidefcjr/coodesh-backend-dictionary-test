@@ -11,8 +11,25 @@ use Illuminate\Support\Facades\Http;
 
 class WordsController extends Controller
 {
-
-    //Dados da palavra
+    /**
+     * Word Details
+     * 
+     * This endpoint provides detailed information about a specific word, including:
+     * - The word's meaning
+     * - Its phonetic
+     * - Usage examples
+     * - Synonyms and antonyms (if available)
+     * - And others avaible
+     * 
+     * The endpoint makes an external request to 'https://api.dictionaryapi.dev/api/v2/entries/en/{word}' to retrieve the data.
+     * 
+     * If a word exists in the external API but not in the API database, it will be added.
+     * 
+     * The response is then cached for 30 days to improve performance and reduce external API calls.
+     * 
+     * Note: If the word's data is not available or the cache has expired, a new request will be made to the external API.
+     * 
+     */
     public function show(Request $request)
     {
         $userId = $request->user()->id;
@@ -28,7 +45,7 @@ class WordsController extends Controller
         if ($cachedResponse) {
             HistoryWordsController::store($userId, $word);
             $formatedTime = number_format(($cachedEndTime - $cachedStartTime) * 1000, 4) . 'ms';
-            return response()->json($cachedResponse, 200)->withHeaders([
+            return response($cachedResponse)->withHeaders([
                 'x-cache' => 'HIT',
                 'x-response-time' => $formatedTime
             ]);
@@ -53,18 +70,22 @@ class WordsController extends Controller
 
             //Retorna a Resposta
             $formatedTime = number_format(($endTime - $startTime) * 1000, 4) . 'ms';
-            return response()->json($response, 200)->withHeaders([
+            return response($response, 200)->withHeaders([
                 'x-cache' => 'MISS',
                 'x-response-time' => $formatedTime
             ]);
         }
         throw new Exception();
-        
     }
 
 
 
-    //Busca de palavras do DB
+    /**
+     * Search Words
+     * 
+     * Use this endpoint to search for words in the API's database.
+     * You can retrieve a list of available words based on your search query
+     */
     public function index(Request $request)
     {
         //Validação dos dados

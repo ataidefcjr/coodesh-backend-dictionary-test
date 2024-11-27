@@ -9,20 +9,28 @@ use Illuminate\Http\Request;
 class HistoryWordsController extends Controller
 {
     //Guarda um histórico (método estático, chamado pelo WordController)
-    static public function store($userId, $word){
+    static public function store($userId, $word)
+    {
         //Verifica se existe o registro antes de criar
         HistoryWords::firstOrCreate([
             'user_id' => $userId,
             'word' => $word,
-        ],[
+        ], [
             'user_id' => $userId,
             'word' => $word,
             'added' => now()
         ]);
     }
 
-    //Mostra os históricos
-    public function show(Request $request){
+    /**
+     * Word History
+     * 
+     * View all the words you've seen.
+     * <br>
+     * You can specify the number of results per page (limit) and the page you'd like to visit.
+     */
+    public function show(Request $request)
+    {
         //Validação
         $request->validate([
             'limit' => 'nullable|numeric|max:100|min:1',
@@ -37,9 +45,7 @@ class HistoryWordsController extends Controller
         $data = HistoryWords::where('user_id', $userId)->select('*')->paginate($limit, ['*'], ['page'], $page);
         //Formata
         $formatedHistory = WordsResource::responseFormatter($data);
-        
-        return response()->json($formatedHistory,200);
+
+        return response()->json($formatedHistory, 200);
     }
-
-
 }
