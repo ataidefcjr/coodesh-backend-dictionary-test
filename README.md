@@ -96,7 +96,6 @@ Este é um passo a passo de como rodar a aplicação manualmente.
 - [**Git**](https://git-scm.com/downloads)
 - [**PHP**](https://www.php.net/downloads.php) - versão 8.3 ou superior
 - [**Composer**](https://getcomposer.org/download/) - versão 2.7 ou superior
-- [**Node.js**](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager)
 - [**MySQL**](https://dev.mysql.com/downloads/) (Opcional)
 
 Obs: Você pode utilizar outro database caso deseje, basta alterar as configurações do `.env`.
@@ -128,9 +127,7 @@ DB_PASSWORD=
 ```bash
 composer install
 ```
-```bash
-npm install
-```
+
 
 4. Gere uma chave de acesso, a chave será automaticamente escrita no `.env`
 ```bash
