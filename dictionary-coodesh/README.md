@@ -123,7 +123,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-3. Instale as dependẽncias do Composer e NPM
+3. Instale as dependẽncias do Composer
 ```bash
 composer install
 ```
@@ -231,9 +231,12 @@ Como estava fazendo ponto a ponto das instruções, a última obrigatoriedade do
 
 Decidi por guardar o `cache` por 30 dias, o que pode ser facilmente ajustado caso necessário, o desempenho foi bastante satisfatório, economizando chamadas externas e diminuindo o tempo de resposta.
 
+Quanto ao deploy foi feito na Amazon usando uma EC2 e pode ser acessada no link a seguir [ataidefcjr.online:8000/docs/api](https://ataidefcjr.online:8000/docs/api)
+
 Logo que terminei parti para efetuar os diferenciais que foram: 
 * Docker
 * Documentação
+* Deploy
 
 A documentação foi uma das partes mais difíceis para mim, (que também foi a minha primeira vez fazendo) pois o `Scramble` apesar de automatizar quase tudo, perdi muito tempo procurando sobre todas as funcionalidades e como alterar algumas coisas que haviam sido automatizadas de forma errada, um dos erros que não consegui sanar foi a padronização das respostas, o mesmo apresenta diversos códigos de status que não ocorrem.
 
