@@ -38,7 +38,7 @@ class ImportWords extends Command
             foreach($data as $word => $value){
                 $words[]=['word' => $word];
                 
-                if(count($words) >= 50000){
+                if(count($words) >= 5000){
                     Words::insertOrIgnore($words);
                     $words=[];
                 }

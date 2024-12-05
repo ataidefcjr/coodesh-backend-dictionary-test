@@ -42,7 +42,7 @@ class HistoryWordsController extends Controller
         $limit = $request->get('limit', 4);
 
         //Busca resultado
-        $data = HistoryWords::where('user_id', $userId)->select('*')->paginate($limit, ['*'], ['page'], $page);
+        $data = HistoryWords::where('user_id', $userId)->select('*')->orderBy('added', 'desc')->paginate($limit, ['*'], ['page'], $page);
         //Formata
         $formatedHistory = WordsResource::responseFormatter($data);
 

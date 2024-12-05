@@ -101,7 +101,7 @@ class WordsController extends Controller
         $page = $request->get('page', 1);
 
         //Busca no Banco de Dados
-        $result = Words::where('word', 'like', "$search%")->select('word')->paginate($limit, ['*'], ['page'], $page);
+        $result = Words::where('word', 'like', "$search%")->select('word')->orderBy('word', 'asc')->paginate($limit, ['*'], ['page'], $page);
 
         //Formata o resultado
         $formatedResult = WordsResource::searchResponseFormatter($result);

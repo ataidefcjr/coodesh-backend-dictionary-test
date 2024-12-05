@@ -85,7 +85,7 @@ class FavoriteWordsController extends Controller
         $page = $request->get('page', 1);
 
         //Busca a query no DB
-        $result = FavoriteWords::where('user_id', $id)->select('*')->paginate($limit, ['*'], ['page'], $page);
+        $result = FavoriteWords::where('user_id', $id)->select('*')->orderBy('added', 'desc')->paginate($limit, ['*'], ['page'], $page);
 
         //Formatação 
         $formatedResult = WordsResource::responseFormatter($result);
